@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "os"
+name = "slime_os"
 version = "0.1.0"
