@@ -1,5 +1,30 @@
+# Here are some documents about .cargo/config.toml:
+#
+# 1. About cargo configration: <https://doc.rust-lang.org/cargo/reference/config.html>
+# Or just see: <https://doc.rust-lang.org/cargo/reference/config.html#hierarchical-structure>
+#
+# 2. About cargo manifest: <https://doc.rust-lang.org/cargo/reference/manifest.html>
+# 
+# 3. Since this project needs nightly version, some unstable features are list below:
+# <https://doc.rust-lang.org/cargo/reference/unstable.html>
+
+# Below can be seen at the url below:
+# <https://doc.rust-lang.org/cargo/reference/config.html#configuration-format>
+
 [build]
 target = "riscv64gc-unknown-none-elf"
 
 [target.riscv64gc-unknown-none-elf]
-rustflags = ["-Clink-arg=-Tsrc/linker.ld", "-Cforce-frame-pointers=yes"]
+# `rustflags` are just easily passed to `rustc`, you can see more about this
+# by commands below:
+# $ rustc -C help
+
+# -C link-arg=val -- a single extra argument to append to the linker invocation
+#                    (can be used several times)
+# -C force-frame-pointers=val -- force use of the frame pointers
+#
+# Find more about `rustc`:
+# <https://doc.rust-lang.org/rustc/index.html>
+# Or, you might be interested in the gnu linker(for the meaning of "-Tsrc/linker.ld"):
+# <https://www.gnu.org/software/coreutils/manual/html_node/ln-invocation.html>
+rustflags = ["-C link-arg=-Tsrc/linker.ld", "-C force-frame-pointers=yes"]
