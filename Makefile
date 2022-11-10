@@ -16,7 +16,7 @@ run: slime_kernel
 	@qemu-system-riscv64 \
 		-machine virt \
 		-nographic \
-		-bios $(BOOTLOADER)
+		-bios $(BOOTLOADER) \
 		-device loader,file=$(KERNEL_BIN),addr=$(KERNEL_ENTRY_PA)
 
 .PHONY: dbg
