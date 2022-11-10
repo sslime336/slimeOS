@@ -19,6 +19,19 @@ run: slime_kernel
 		-bios $(BOOTLOADER)
 		-device loader,file=$(KERNEL_BIN),addr=$(KERNEL_ENTRY_PA)
 
+.PHONY: dbg
+dbg: slime_kernel
+	@qemu-system-riscv64 \
+		-machine virt \
+		-nographic \
+		-bios $(BOOTLOADER) \
+		-device loader,file=$(KERNEL_BIN),addr=$(KERNEL_ENTRY_PA) \
+		-s -S
+	@riscv64-unknown-elf-gdb \
+		-ex 'file $(KERNEL_ELF)' \
+		-ex 'set arch riscv:rv64' \
+		-ex 'target remote localhost:1234'
+
 .PHONY: clean
 clean:
 	@cargo clean
