@@ -27,4 +27,4 @@ target = "riscv64gc-unknown-none-elf"
 # <https://doc.rust-lang.org/rustc/index.html>
 # Or, you might be interested in the gnu linker(for the meaning of "-Tsrc/linker.ld"):
 # <https://www.gnu.org/software/coreutils/manual/html_node/ln-invocation.html>
-rustflags = ["-C link-arg=-Tsrc/linker.ld", "-C force-frame-pointers=yes"]
+rustflags = ["-Clink-arg=-Tsrc/linker.ld", "-Cforce-frame-pointers=yes"]

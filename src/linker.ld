@@ -1,6 +1,6 @@
 OUTPUT_ARCH(riscv)
 ENTRY(_start)
-BASE_ADDRESS = 0x80_200_000;
+BASE_ADDRESS = 0x80200000;
 
 SECTIONS {
     . = BASE_ADDRESS; /* `.` represents the current phycial address */
@@ -8,7 +8,7 @@ SECTIONS {
 
     text_entry = .; /* the start of text section */
     .text : {
-        *(.text.entry)
+        *(.text.entry) /* rustsbi entry section */
         *(.text .text.*)
     }
 
