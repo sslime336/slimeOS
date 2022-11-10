@@ -8,15 +8,13 @@ mod sbi;
 
 use core::arch::global_asm;
 
-use fmt::console_putchar;
 global_asm!(include_str!("entry.s"));
 
 #[no_mangle]
 pub fn rust_main() -> ! {
     clear_bss();
-    console_putchar('O' as usize);
-    console_putchar('K' as usize);
-    loop {}
+    println!("Hello, slimeOS!");
+    panic!("GoodBye!");
 }
 
 fn clear_bss() {
