@@ -26,11 +26,9 @@ dbg: slime_kernel
 		-nographic \
 		-bios $(BOOTLOADER) \
 		-device loader,file=$(KERNEL_BIN),addr=$(KERNEL_ENTRY_PA) \
-		-s -S
-	@riscv64-unknown-elf-gdb \
-		-ex 'file $(KERNEL_ELF)' \
-		-ex 'set arch riscv:rv64' \
-		-ex 'target remote localhost:1234'
+		-s -S 
+# -s -- pause the CPU when start, using gdb 'c' to continue
+# -S -- abbreviation of `-gdb tcp::1234`
 
 .PHONY: clean
 clean:
