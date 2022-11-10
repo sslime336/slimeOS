@@ -5,6 +5,3 @@ mod lang_items;
 
 use core::arch::global_asm;
 global_asm!(include_str!("entry.s"));
-
-#[no_mangle]
-fn rust_main() {}
