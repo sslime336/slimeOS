@@ -1,5 +1,3 @@
-#![allow(unused)]
-
 use core::arch::asm;
 
 pub(crate) const SBI_SET_TIMER: usize = 0;

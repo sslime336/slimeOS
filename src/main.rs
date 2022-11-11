@@ -1,11 +1,17 @@
 #![no_std]
 #![no_main]
 #![feature(panic_info_message)]
+#![feature(default_alloc_error_handler)]
+#![allow(unused)]
 
 mod fmt;
 mod lang_items;
+mod mm;
 mod sbi;
+mod trap;
+mod consts;
 
+extern crate alloc;
 use core::arch::global_asm;
 
 global_asm!(include_str!("entry.s"));
