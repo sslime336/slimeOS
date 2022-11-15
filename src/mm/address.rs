@@ -1,13 +1,24 @@
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+use crate::consts::PAGE_SIZE;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct PhycialAddress(pub usize);
 
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+impl PhycialAddress {
+    pub fn floor(&self) -> PhycialAddress {
+        PhycialAddress(self.0 / PAGE_SIZE)
+    }
+    pub fn ceil(&self) -> PhycialAddress {
+        PhycialAddress((self.0 + PAGE_SIZE - 1) / PAGE_SIZE)
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct VirtualAdderss(pub usize);
 
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-pub struct PhysPageNum(pub usize);
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+pub struct PhyPageNum(pub usize);
 
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct VirtPageNum(pub usize);
 
 impl From<usize> for PhycialAddress {
@@ -22,9 +33,9 @@ impl From<usize> for VirtualAdderss {
     }
 }
 
-impl From<usize> for PhysPageNum {
+impl From<usize> for PhyPageNum {
     fn from(phy_page_num: usize) -> Self {
-        PhysPageNum(phy_page_num)
+        PhyPageNum(phy_page_num)
     }
 }
 impl From<usize> for VirtPageNum {
@@ -32,6 +43,3 @@ impl From<usize> for VirtPageNum {
         VirtPageNum(virt_page_num)
     }
 }
-
-const PHYCIAL_ADDR_WIDTH_SV39: usize = 56;
-// const PHYCIAL_PAGE_NUM_WIDTH_SV39:usize = PHYCIAL_ADDR_WIDTH_SV39 - Pag

@@ -10,6 +10,7 @@ mod mm;
 mod sbi;
 mod trap;
 mod consts;
+mod sync;
 
 extern crate alloc;
 use core::arch::global_asm;
