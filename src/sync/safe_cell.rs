@@ -5,11 +5,11 @@ pub struct SafeCell<T> {
 }
 
 impl<T> SafeCell<T> {
-    pub fn new<T>(item: T) -> Self {
+    pub fn new(item: T) -> Self {
         SafeCell {
             inner: RefCell::new(item),
         }
     }
 }
 
-impl Sync<_> for SafeCell<_> {}
+unsafe impl<T> Sync for SafeCell<T> {}

@@ -1,6 +1,7 @@
-use crate::sync::SafeCell;
 use alloc::vec::Vec;
 use lazy_static::lazy_static;
+
+use crate::sync::safe_cell::SafeCell;
 
 use super::address::{PhyPageNum, PhycialAddress};
 
