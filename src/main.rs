@@ -4,13 +4,14 @@
 #![feature(default_alloc_error_handler)]
 #![allow(unused)]
 
+mod consts;
 mod fmt;
 mod lang_items;
 mod mm;
 mod sbi;
-mod trap;
-mod consts;
+mod sbi_calls;
 mod sync;
+mod trap;
 
 extern crate alloc;
 use core::arch::global_asm;

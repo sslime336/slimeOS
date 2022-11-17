@@ -4,7 +4,7 @@ KERNEL_ELF:=target/riscv64gc-unknown-none-elf/release/slime_os
 KERNEL_BIN:=target/riscv64gc-unknown-none-elf/release/slime_kernel.bin
 
 BOOTLOADER:=bootloader/rustsbi-qemu.bin # rustsbi-qemu
-KERNEL_ENTRY_PA:=0x80200000 # rustsbi-qemu fn `entry` PA: phycial address
+KERNEL_ENTRY_PA:=0x80200000 # our kernel's entry, actually the `rust_main` in main.rs
 
 .PHONY: slime_kernel
 slime_kernel:

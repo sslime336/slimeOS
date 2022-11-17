@@ -1,6 +1,6 @@
 use core::fmt::{self, Write};
 
-use crate::sbi::*;
+use crate::sbi_calls::*;
 
 struct Stdout;
 
@@ -12,10 +12,6 @@ impl Write for Stdout {
 
         Ok(())
     }
-}
-
-pub fn console_putchar(ch: usize) {
-    sbi_call(SBI_CONSOLE_PUTCHAR, ch, 0, 0);
 }
 
 pub fn print(args: fmt::Arguments) {
