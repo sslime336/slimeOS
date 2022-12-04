@@ -4,6 +4,8 @@
 #![feature(default_alloc_error_handler)]
 #![allow(unused)]
 
+use core::arch::global_asm;
+
 mod consts;
 mod fmt;
 mod lang_items;
@@ -14,7 +16,6 @@ mod sync;
 mod trap;
 
 extern crate alloc;
-use core::arch::global_asm;
 
 global_asm!(include_str!("entry.s"));
 
