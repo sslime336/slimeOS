@@ -11,24 +11,12 @@ use super::context::TrapContext;
 
 global_asm!(include_str!("trap.S"));
 
-pub fn init() {
-    // save all registers
-    extern "C" {
-        fn __alltraps();
-    }
-
-    sscratch::write(0); // trap from kernel
-    unsafe {
-        stvec::write(__alltraps as usize, stvec::TrapMode::Direct);
-    }
-    println!("trap init finished");
-}
-
 #[no_mangle]
 fn trap_handler(ctx: &mut TrapContext) -> &mut TrapContext {
     let scause = scause::read();
     let stval = stval::read();
     match scause.cause() {
+        // Interrupt
         scause::Trap::Interrupt(UserSoft) => {}
         scause::Trap::Interrupt(SupervisorSoft) => {}
         scause::Trap::Interrupt(UserTimer) => {}
@@ -36,6 +24,8 @@ fn trap_handler(ctx: &mut TrapContext) -> &mut TrapContext {
         scause::Trap::Interrupt(UserExternal) => {}
         scause::Trap::Interrupt(SupervisorExternal) => {}
         scause::Trap::Interrupt(_) => {} // as UNKNOWN
+
+        // Exception
         scause::Trap::Exception(InstructionMisaligned) => {}
         scause::Trap::Exception(InstructionFault) => {}
         scause::Trap::Exception(IllegalInstruction) => {}
@@ -48,5 +38,8 @@ fn trap_handler(ctx: &mut TrapContext) -> &mut TrapContext {
         scause::Trap::Exception(StorePageFault) => {}
         scause::Trap::Exception(_) => {} // as UNKNOWN,
     }
-    ctx
+
+    println!("{:?}", ctx.sstatus);
+    ctx;
+    panic!("fin")
 }

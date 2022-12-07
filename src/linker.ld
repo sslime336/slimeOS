@@ -10,32 +10,32 @@ BASE_ADDRESS = 0x80200000; /* Here is where our kernel will be located */
 */
 
 SECTIONS {
-    . = BASE_ADDRESS; /* `.` represents the current phycial address */
+    . = BASE_ADDRESS; 
 
-    text_entry = .; /* the start of text section */
+    stext = .; /* the start of text section */
     .text : {
         *(.text.entry) /* rustsbi entry section */
         *(.text .text.*)
     }
 
     . = ALIGN(4K);
-    text_end = .; /* end text section */
-    rodata_entry = .;
+    etext = .; /* end text section */
+    srodata = .;
     .rodata : {
         *(.rodata .rodata.*)
-        *(.rodata_entry .rodata_entry.*)
+        *(.srodata .srodata.*)
     }
 
     . = ALIGN(4K);
-    rodata_end = .;
-    data_entry = .;
+    erodata = .;
+    sdata = .;
     .data : {
         *(.daat .data.*)
-        *(.data_entry .data_entry.*)
+        *(.sdata .sdata.*)
     }
 
     . = ALIGN(4k);
-    data_end = .;
+    edata = .;
     .bss : {
         *(.bss.stack)
         bss_entry = .;  /* start of bss */

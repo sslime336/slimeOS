@@ -4,7 +4,7 @@
 #![feature(default_alloc_error_handler)]
 #![allow(unused)]
 
-use core::arch::global_asm;
+use core::arch::{global_asm, asm};
 
 mod consts;
 mod fmt;
@@ -21,8 +21,14 @@ global_asm!(include_str!("entry.s"));
 
 #[no_mangle]
 pub fn rust_main() -> ! {
+    trap::init();
     clear_bss();
     println!("Hello, slimeOS!");
+    
+    unsafe {
+        asm!("sret");
+    }
+
     panic!("GoodBye!");
 }
 
