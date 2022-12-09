@@ -12,14 +12,14 @@ BASE_ADDRESS = 0x80200000; /* Here is where our kernel will be located */
 SECTIONS {
     . = BASE_ADDRESS; 
 
-    stext = .; /* the start of text section */
+    stext = .;
     .text : {
         *(.text.entry) /* rustsbi entry section */
         *(.text .text.*)
     }
 
     . = ALIGN(4K);
-    etext = .; /* end text section */
+    etext = .;
     srodata = .;
     .rodata : {
         *(.rodata .rodata.*)
@@ -38,13 +38,13 @@ SECTIONS {
     edata = .;
     .bss : {
         *(.bss.stack)
-        bss_entry = .;  /* start of bss */
+        sbss = .;
         *(.bss .bss.*) 
-        *(.bss_entry .bss_entry.*)
+        *(.sbss .sbss.*)
     }
 
     . = ALIGN(4k);
-    bss_end = .;
+    ebss = .;
 
     /*
         To find more about /DISCARD/:
