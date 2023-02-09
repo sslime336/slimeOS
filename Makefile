@@ -3,8 +3,7 @@
 KERNEL_ELF:=target/riscv64gc-unknown-none-elf/release/slime_os
 KERNEL_BIN:=target/riscv64gc-unknown-none-elf/release/slime_kernel.bin
 
-BOOTLOADER:=bootloader/rustsbi-qemu.bin # rustsbi-qemu
-KERNEL_ENTRY_PA:=0x80200000 # our kernel's entry, actually the `rust_main` in main.rs
+KERNEL_ENTRY_PHYSICAL_ADDRESS:=0x80200000 # our kernel's entry, actually the `rust_main` in main.rs
 
 .PHONY: slime_kernel
 slime_kernel:
@@ -16,19 +15,22 @@ run: slime_kernel
 	@qemu-system-riscv64 \
 		-machine virt \
 		-nographic \
-		-bios $(BOOTLOADER) \
-		-device loader,file=$(KERNEL_BIN),addr=$(KERNEL_ENTRY_PA)
+		-device loader,file=$(KERNEL_BIN),addr=$(KERNEL_ENTRY_PHYSICAL_ADDRESS)
 
-.PHONY: dbg
-dbg: slime_kernel
+.PHONY: debug-server
+debug-server: slime_kernel
 	@qemu-system-riscv64 \
 		-machine virt \
 		-nographic \
-		-bios $(BOOTLOADER) \
-		-device loader,file=$(KERNEL_BIN),addr=$(KERNEL_ENTRY_PA) \
+		-device loader,file=$(KERNEL_BIN),addr=$(KERNEL_ENTRY_PHYSICAL_ADDRESS) \
 		-s -S 
-# -s -- pause the CPU when start, using gdb 'c' to continue
-# -S -- abbreviation of `-gdb tcp::1234`
+
+.PHONY: debug
+debug: 
+	@riscv64-unknown-elf-gdb \
+    -ex 'file $(KERNEL_ELF)' \
+    -ex 'set arch riscv:rv64' \
+    -ex 'target remote localhost:1234'
 
 .PHONY: clean
 clean:

@@ -2,13 +2,6 @@ OUTPUT_ARCH(riscv)
 ENTRY(_start)
 BASE_ADDRESS = 0x80200000; /* Here is where our kernel will be located */
 
-/*
-    qemu will loads the rustsbi-qemu.bin which is located at bootloader/ at
-    0x80000000 (7 zeros...)
-
-    currently we only use [0x80000000,0x80800000)
-*/
-
 SECTIONS {
     . = BASE_ADDRESS; 
 

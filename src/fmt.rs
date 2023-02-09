@@ -1,6 +1,6 @@
 use core::fmt::{self, Write};
 
-use crate::sbi_calls::*;
+use crate::sbi::console_putchar;
 
 struct Stdout;
 
