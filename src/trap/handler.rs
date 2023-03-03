@@ -1,7 +1,7 @@
 use core::arch::global_asm;
 
 use super::context::TrapFrame;
-use crate::{println, trap::trap_handler};
+use crate::{println, trap::handler};
 use riscv::register::{
     scause::{self, Exception::*, Interrupt::*},
     sepc, sscratch, stval, stvec,

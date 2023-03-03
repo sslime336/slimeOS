@@ -1,13 +1,16 @@
 OUTPUT_ARCH(riscv)
 ENTRY(_start)
-BASE_ADDRESS = 0x80200000; /* Here is where our kernel will be located */
+BASE_ADDRESS = 0x80200000;
 
-SECTIONS {
-    . = BASE_ADDRESS; 
+SECTIONS
+{
+    . = BASE_ADDRESS;
+
+    skernel = .;
 
     stext = .;
     .text : {
-        *(.text.entry) /* rustsbi entry section */
+        *(.text.entry)
         *(.text .text.*)
     }
 
@@ -23,27 +26,25 @@ SECTIONS {
     erodata = .;
     sdata = .;
     .data : {
-        *(.daat .data.*)
+        *(.data .data.*)
         *(.sdata .sdata.*)
     }
 
-    . = ALIGN(4k);
+    . = ALIGN(4K);
     edata = .;
     .bss : {
         *(.bss.stack)
         sbss = .;
-        *(.bss .bss.*) 
+        *(.bss .bss.*)
         *(.sbss .sbss.*)
     }
 
-    . = ALIGN(4k);
-    ebss = .;
 
-    /*
-        To find more about /DISCARD/:
-        <https://sourceware.org/binutils/docs/ld/Output-Section-Discarding.html#Output-Section-Discarding>
-    */
-    /DISCARD/ : { /* To force-frame-pointers */
+    . = ALIGN(4K);
+    ebss = .;
+    ekernel = .;
+
+    /DISCARD/ : {
         *(.eh_frame)
     }
 }

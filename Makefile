@@ -1,9 +1,11 @@
 .DEFAULT_GOAL:=slime_kernel
 
+BOOTLOADER:=bootloader/rustsbi-qemu.bin
+
 KERNEL_ELF:=target/riscv64gc-unknown-none-elf/release/slime_os
 KERNEL_BIN:=target/riscv64gc-unknown-none-elf/release/slime_kernel.bin
 
-KERNEL_ENTRY_PHYSICAL_ADDRESS:=0x80200000 # our kernel's entry, actually the `rust_main` in main.rs
+KERNEL_ENTRY_PHYSICAL_ADDRESS:=0x80200000
 
 .PHONY: slime_kernel
 slime_kernel:
@@ -15,6 +17,7 @@ run: slime_kernel
 	@qemu-system-riscv64 \
 		-machine virt \
 		-nographic \
+		-kernel $(KERNEL_BIN) \
 		-device loader,file=$(KERNEL_BIN),addr=$(KERNEL_ENTRY_PHYSICAL_ADDRESS)
 
 .PHONY: debug-server

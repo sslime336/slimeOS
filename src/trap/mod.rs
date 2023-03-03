@@ -3,7 +3,7 @@ use riscv::register::{sscratch, stvec};
 use crate::println;
 
 mod context;
-pub mod trap_handler;
+pub mod handler;
 
 pub fn init() {
     // save all registers

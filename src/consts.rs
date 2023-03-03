@@ -1,15 +1,21 @@
-pub const KERNEL_HEAP_SIZE: usize = 4096 * 2;
-pub const KERNEL_STACK_SIZE: usize = 4096 * 20;
-
-pub const USER_STACK_SIZE: usize = 4096 * 2;
-
-pub const PAGE_SIZE: usize = 0x1_000;
+pub const PAGE_SIZE: usize = 0x1000;
 pub const PAGE_SIZE_BITS: usize = 0xc;
 
-/// The end address of the kernel
-pub const MEMORY_END: usize = 0x80_800_000;
+pub const USER_STACK_SIZE: usize = PAGE_SIZE * 4;
+pub const KERNEL_STACK_SIZE: usize = PAGE_SIZE * 2;
 
-/// Read more about SV39: <https://en.wikipedia.org/wiki/RISC-V#Memory_access>
-pub const PHYCIAL_ADDR_WIDTH_SV39: usize = 56;
+pub const KERNEL_HEAP_SIZE: usize = PAGE_SIZE * 256;
+pub const USER_HEAP_SIZE: usize = PAGE_SIZE * 48;
 
-pub const BYTE_SIZE: usize = 8;
+pub const MEMORY_END: usize = 0x807E0000;
+
+pub const TRAMPOLINE: usize = usize::MAX - PAGE_SIZE + 1;
+pub const TRAP_CONTEXT: usize = TRAMPOLINE - PAGE_SIZE;
+
+pub const MMAP_BASE: usize = 0x60000000;
+
+/// CLOCK_FREQ diffs on different platform, the unit is Hertz(Hz).
+/// More actually, it's the increament of the register mtime's value.
+pub const CLOCK_FREQ: usize = 12500000;
+
+pub const MMIO: &[(usize, usize)] = &[(0x10001000, 0x1000)];

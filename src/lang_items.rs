@@ -1,6 +1,6 @@
 use core::panic::PanicInfo;
 
-use crate::{println, sbi::shutdown};
+use crate::{fmt, println, sbi::legacy::shutdown};
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
@@ -12,7 +12,10 @@ fn panic(info: &PanicInfo) -> ! {
             info.message().unwrap()
         );
     } else {
-        println!("Paniced: {}", info.message().unwrap());
+        fmt::print(format_args!(
+            concat!("Paniced: {}", "\n"),
+            info.message().unwrap()
+        ));
     }
     shutdown()
 }
