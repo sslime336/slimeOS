@@ -57,7 +57,7 @@ pub fn shutdown() -> ! {
     // Actually, when we called SBI_SHUTDOWN, the sbi_call will not return.
     // We place the panic here only because the compiler needs no-return return type.
     sbi_call(SBI_SHUTDOWN, 0, 0, 0);
-    panic!("shutdown");
+    loop {}
 }
 
 pub fn clear_timer(t: usize) {

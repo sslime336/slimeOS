@@ -38,3 +38,21 @@ debug:
 .PHONY: clean
 clean:
 	@cargo clean
+
+################################################################
+#                                                              #
+#                          U-mode                              #
+#                                                              #
+################################################################
+
+.PHONY: user-clean
+user-clean:
+	@cd user && cargo clean
+
+.PHONY: user-run
+user-run: user-build
+	@
+
+.PHONY: user-build
+user-build:
+	@

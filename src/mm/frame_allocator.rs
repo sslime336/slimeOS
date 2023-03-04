@@ -9,9 +9,21 @@ type FrameAllocatorImpl = StackFrameAllocator;
 
 lazy_static! {
     /// Global frame memory alloctor for vistual page
-    pub static ref FRAME_ALLOCTOR: SafeCell<StackFrameAllocator> =
+    #[allow(non_upper_case_globals)]
+    pub static ref GlobalFrameAlloctor: SafeCell<FrameAllocatorImpl> =
         unsafe { SafeCell::new(FrameAllocatorImpl::new()) };
 }
+
+pub struct FrameTracker {
+    pub ppn: PhyPageNum,
+}
+
+impl FrameTracker {
+    // pub fn new(ppn: PhyPageNum) -> FrameTracker {
+    //     let bytes_array = ppn.0.byte
+    // }
+}
+
 
 trait FrameAllocator {
     fn new() -> Self;
