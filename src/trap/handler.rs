@@ -1,16 +1,15 @@
 use core::arch::global_asm;
 
-use super::context::TrapFrame;
+use super::context::TrapContext;
 use crate::{println, trap::handler};
 use riscv::register::{
     scause::{self, Exception::*, Interrupt::*},
     sepc, sscratch, stval, stvec,
+    utvec::TrapMode,
 };
 
-global_asm!(include_str!("trap.S"));
-
 #[no_mangle]
-fn trap_handler(trap_frame: &mut TrapFrame) -> &mut TrapFrame {
+fn trap_handler(trap_frame: &mut TrapContext) -> &mut TrapContext {
     let scause = scause::read();
     let stval = stval::read();
     match scause.cause() {
@@ -22,7 +21,7 @@ fn trap_handler(trap_frame: &mut TrapFrame) -> &mut TrapFrame {
         scause::Trap::Interrupt(UserExternal) => {}
         scause::Trap::Interrupt(SupervisorExternal) => {}
         scause::Trap::Interrupt(_) => {
-            panic!("Unknown interrupt!");
+            panic!("unknown interrupt");
         }
 
         // Exceptions
@@ -37,7 +36,7 @@ fn trap_handler(trap_frame: &mut TrapFrame) -> &mut TrapFrame {
         scause::Trap::Exception(LoadPageFault) => {}
         scause::Trap::Exception(StorePageFault) => {}
         scause::Trap::Exception(_) => {
-            panic!("Unknown exception!");
+            panic!("unknown exception");
         }
     }
 

@@ -19,10 +19,10 @@ fn sbi_call(which: usize, arg0: usize, arg1: usize, arg2: usize) -> usize {
     unsafe {
         asm!(
             "ecall",
-            inlateout("x10") arg0 => ret,
-            in("x11") arg1,
-            in("x12") arg2,
-            in("x17") which,
+            inlateout("a0") arg0 => ret,
+            in("a1") arg1,
+            in("a2") arg2,
+            in("a7") which,
         );
     }
 
@@ -30,11 +30,11 @@ fn sbi_call(which: usize, arg0: usize, arg1: usize, arg2: usize) -> usize {
 }
 
 /// Returns 0 upon success or an implementation specific negative error code.
-/// 
+///
 /// Programs the clock for next event after stime_value time.
-/// 
+///
 /// This function also clears the pending timer interrupt bit.
-/// 
+///
 /// See more:
 /// <http://rcore-os.cn/rCore-Tutorial-Book-v3/chapter3/4time-sharing-system.html#id6>
 pub fn set_timer(stime_value: usize) -> isize {
@@ -54,6 +54,8 @@ pub fn clear_ipi() {
 }
 
 pub fn shutdown() -> ! {
+    // Actually, when we called SBI_SHUTDOWN, the sbi_call will not return.
+    // We place the panic here only because the compiler needs no-return return type.
     sbi_call(SBI_SHUTDOWN, 0, 0, 0);
     panic!("shutdown");
 }

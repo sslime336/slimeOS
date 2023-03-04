@@ -1,3 +1,5 @@
+use core::arch::global_asm;
+
 use riscv::register::{sscratch, stvec};
 
 use crate::println;
@@ -5,8 +7,9 @@ use crate::println;
 mod context;
 pub mod handler;
 
+global_asm!(include_str!("trap.S"));
+
 pub fn init() {
-    // save all registers
     extern "C" {
         fn __alltraps();
     }

@@ -1,14 +1,15 @@
 #![no_std]
 #![no_main]
 #![feature(panic_info_message)]
+#![feature(alloc_error_handler)]
 #![allow(unused)]
 
 use core::arch::{asm, global_asm};
 
-use crate::sbi::{
+use crate::{sbi::{
     base::{get_impl_id, get_spec_version},
     legacy::{set_timer, shutdown},
-};
+}, mm::heap_allocator::{init_heap, heap_test}};
 
 mod consts;
 mod fmt;
@@ -16,6 +17,7 @@ mod lang_items;
 mod mm;
 mod sbi;
 mod sync;
+mod syscall;
 mod timer;
 mod trap;
 
@@ -30,11 +32,10 @@ pub fn rust_main() -> ! {
     println!("impl id: {}", get_impl_id());
     println!("sbi version: {}", get_spec_version());
 
-    println!("here start sleeping for 1 second");
-    set_timer(3_000_000_0);
-    println!("one second has passed");
+    init_heap();
+    heap_test();
 
-    shutdown()
+    panic!("Goodbye.");
 }
 
 fn clear_bss() {
