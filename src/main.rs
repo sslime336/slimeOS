@@ -6,10 +6,13 @@
 
 use core::arch::{asm, global_asm};
 
-use crate::{sbi::{
-    base::{get_impl_id, get_spec_version},
-    legacy::{set_timer, shutdown},
-}, mm::heap_allocator::{init_heap, heap_test}};
+use crate::{
+    mm::heap_allocator::{heap_test, init_heap},
+    sbi::{
+        base::{get_impl_id, get_spec_version},
+        legacy::{set_timer, shutdown},
+    },
+};
 
 mod consts;
 mod fmt;
@@ -39,10 +42,26 @@ pub fn rust_main() -> ! {
 }
 
 fn clear_bss() {
+    println!("\n\n---------------slimeOS---------------");
     extern "C" {
+        fn stext();
+        fn etext();
+        fn srodata();
+        fn erodata();
+        fn sdata();
+        fn edata();
         fn sbss();
         fn ebss();
-    }
-
-    (sbss as usize..ebss as usize).for_each(|b| unsafe { (b as *mut u8).write_volatile(0) })
+        fn boot_stack();
+        fn boot_stack_top();
+    };
+    (sbss as usize..ebss as usize).for_each(|b| unsafe { (b as *mut u8).write_volatile(0) });
+    println!(".text [{:#x}, {:#x})", stext as usize, etext as usize);
+    println!(".rodata [{:#x}, {:#x})", srodata as usize, erodata as usize);
+    println!(".data [{:#x}, {:#x})", sdata as usize, edata as usize);
+    println!(
+        "boot_stack [{:#x}, {:#x})",
+        boot_stack as usize, boot_stack_top as usize
+    );
+    println!(".bss [{:#x}, {:#x})", sbss as usize, ebss as usize);
 }

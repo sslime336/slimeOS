@@ -1,0 +1,12 @@
+[build]
+target = "riscv64gc-unknown-none-elf"
+
+[target.riscv64gc-unknown-none-elf]
+rustflags = [
+    # "-Clink-arg=-Tsrc/linker.ld", # 加上会报错，段冲突，看样子是连接脚本没有生效，但具体原因未知，可能和 qemu 有关
+    #
+    # Reference(评论区):
+    # <http://rcore-os.cn/rCore-Tutorial-Book-v3/chapter2/2application.html> 
+    "-Cforce-frame-pointers=yes",
+    "-Copt-level=2",
+]

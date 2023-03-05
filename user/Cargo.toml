@@ -1,15 +1,16 @@
 [package]
 name = "user_lib"
 version = "0.1.0"
-authors = ["Yifan Wu <shinbokuow@163.com>"]
-edition = "2018"
+edition = "2021"
 
 [dependencies]
-riscv = { git = "https://github.com/rcore-os/riscv", features = ["inline-asm"] } 
+riscv = { version = "0.10.1" }
 
+# Currently I don not know beblow can do what.
+# I just want the U-mode programs run smoothly.
 [profile.release]
 debug = true
+opt-level = 1 
 
-# [features]
-# board_qemu = []
-# board_k210 = []
+[profile.dev]
+opt-level = 1 

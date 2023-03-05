@@ -23,10 +23,10 @@ fn main() -> i32 {
 
 fn clear_bss() {
     extern "C" {
-        fn start_bss();
-        fn end_bss();
+        fn sbss();
+        fn ebss();
     }
-    (start_bss as usize..end_bss as usize).for_each(|addr| unsafe {
+    (sbss as usize..ebss as usize).for_each(|addr| unsafe {
         (addr as *mut u8).write_volatile(0);
     });
 }
