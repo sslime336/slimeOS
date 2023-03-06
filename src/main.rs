@@ -14,6 +14,7 @@ use crate::{
     },
 };
 
+mod batch;
 mod consts;
 mod fmt;
 mod lang_items;
@@ -27,6 +28,7 @@ mod trap;
 extern crate alloc;
 
 global_asm!(include_str!("entry.s"));
+global_asm!(include_str!("link_app.S"));
 
 #[no_mangle]
 pub fn rust_main() -> ! {

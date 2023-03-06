@@ -1,20 +1,17 @@
-use core::fmt::Debug;
-
-use riscv::register::{
-    mstatus::SPP,
-    scause::Scause,
-    sstatus::{self, Sstatus},
-};
+use riscv::register::sstatus::{self, set_spp, Sstatus, SPP};
 
 use crate::println;
 
 #[repr(C)]
 pub struct TrapContext {
-    pub x: [usize; 32],
+    pub x: [usize; 32], // 32 x registers
     pub sstatus: Sstatus,
     pub sepc: usize,
-    pub stval: usize,
-    pub scause: Scause,
+    // The following data is written into the corresponding position in
+    // the application address space when the application is initialized.
+    kernel_satp: usize,
+    pub kernel_sp: usize,
+    trap_handler: usize,
 }
 
 impl TrapContext {
@@ -22,12 +19,38 @@ impl TrapContext {
         self.x[2] = sp;
     }
 
+    pub fn app_init_context(
+        entry: usize,
+        sp: usize,
+        kernel_satp: usize,
+        kernel_sp: usize,
+        trap_handler: usize,
+    ) -> Self {
+        let mut sstatus = sstatus::read();
+        unsafe {
+            set_spp(SPP::User);
+        }
+        let mut cx = Self {
+            x: [0; 32],
+            sstatus,
+            sepc: entry, // Trap 返回后到程序入口
+            kernel_satp,
+            kernel_sp,
+            trap_handler,
+        };
+        cx.set_sp(sp);
+        cx
+    }
+}
+
+impl TrapContext {
+    #[allow(unused)]
     pub fn debug_show(&self) {
         println!("------------------TrapContext info------------------");
         println!("sepc:         0x{:x}", self.sepc);
-        // println!("kernel_satp:  0x{:x}", self.kernel_satp);
-        // println!("kernel_sp:    0x{:x}", self.kernel_sp);
-        // println!("trap_handler: 0x{:x}", self.trap_handler);
+        println!("kernel_satp:  0x{:x}", self.kernel_satp);
+        println!("kernel_sp:    0x{:x}", self.kernel_sp);
+        println!("trap_handler: 0x{:x}", self.trap_handler);
         println!("zero: 0x{:x}", self.x[0]);
         println!("ra: 0x{:x}", self.x[1]);
         println!("sp: 0x{:x}", self.x[2]);

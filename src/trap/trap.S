@@ -34,8 +34,6 @@ __alltraps:
     jr t1
 
 __restore:
-    # a0: *TrapContext in user space(Constant); a1: user space token
-
     csrw satp, a1
     sfence.vma
     csrw sscratch, a0
