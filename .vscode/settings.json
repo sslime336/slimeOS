@@ -1,8 +1,3 @@
 {
-    "rust-analyzer.checkOnSave.allTargets": false, // set false to suppress error
-                                                   // from rust-analyzer about `#![no_std]`
-    "rust-analyzer.checkOnSave.extraArgs": [
-        "--target",
-        "riscv64gc-unknown-none-elf"
-    ]
+    "rust-analyzer.check.allTargets": false
 }
