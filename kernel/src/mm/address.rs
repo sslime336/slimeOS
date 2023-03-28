@@ -1,4 +1,4 @@
-use crate::consts::PAGE_SIZE;
+use crate::config::PAGE_SIZE;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct PhycialAddress(pub usize);

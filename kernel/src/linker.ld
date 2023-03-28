@@ -1,20 +1,19 @@
-OUTPUT_ARCH(riscv)
-ENTRY(_start)
-BASE_ADDRESS = 0x80200000;
+OUTPUT_ARCH( "riscv" )
+ENTRY( _start )
 
 SECTIONS
 {
-    . = BASE_ADDRESS;
-
+    . = 0x80000000;
     skernel = .;
 
+    . = ALIGN(0x1000);
     stext = .;
     .text : {
         *(.text.entry)
         *(.text .text.*)
     }
 
-    . = ALIGN(4K);
+    . = ALIGN(0x1000);
     etext = .;
     srodata = .;
     .rodata : {
@@ -22,7 +21,7 @@ SECTIONS
         *(.srodata .srodata.*)
     }
 
-    . = ALIGN(4K);
+    . = ALIGN(0x1000);
     erodata = .;
     sdata = .;
     .data : {
@@ -30,7 +29,7 @@ SECTIONS
         *(.sdata .sdata.*)
     }
 
-    . = ALIGN(4K);
+    . = ALIGN(0x1000);
     edata = .;
     .bss : {
         *(.bss.stack)
@@ -40,11 +39,7 @@ SECTIONS
     }
 
 
-    . = ALIGN(4K);
+    . = ALIGN(0x1000);
     ebss = .;
     ekernel = .;
-
-    /DISCARD/ : {
-        *(.eh_frame)
-    }
 }

@@ -1,58 +1,86 @@
-.DEFAULT_GOAL:=slime_kernel
+.DEFAULT_GOAL = $(KERNEL)
 
-BOOTLOADER:=bootloader/rustsbi-qemu.bin
+KERNEL = slime_os
 
-KERNEL_ELF:=target/riscv64gc-unknown-none-elf/release/slime_os
-KERNEL_BIN:=target/riscv64gc-unknown-none-elf/release/slime_kernel.bin
+NHART = 5 	   # The number of harts
+CPU = rv64     # riscv x64
+MEM = 128M 	   # available memory, from 0x80000000 to 0x88000000
 
-KERNEL_ENTRY_PHYSICAL_ADDRESS:=0x80200000
+MACHINE = virt
 
-.PHONY: slime_kernel
-slime_kernel:
-	@cargo build --release
+KERNEL_PATH = kernel/target/riscv64gc-unknown-none-elf/release
+
+KERNEL_ELF = $(KERNEL_PATH)/$(KERNEL)
+KERNEL_BIN = $(KERNEL_PATH)/$(KERNEL).bin
+
+BOOTLOADER = none
+
+LOG_LEVEL = DEBUG
+
+
+CRATE_KERNEL = kernel
+CRATE_USER = user
+
+${KERNEL}:
+	@cd $(CRATE_KERNEL)
+	@LOG_LV=${LOG_LEVEL} cargo build --release
 	@rust-objcopy --strip-all $(KERNEL_ELF) -O binary $(KERNEL_BIN)
 
 .PHONY: run
-run: slime_kernel
-	@qemu-system-riscv64 \
-		-machine virt \
+run: $(KERNEL)
+	@$(QEMU) \
+		-M $(MACHINE) \
+		-serial mon:stdio \
 		-nographic \
+		-cpu $(CPU) \
+		-bios $(BOOTLOADER) \
+		-m $(MEM) \
 		-kernel $(KERNEL_BIN) \
-		-device loader,file=$(KERNEL_BIN),addr=$(KERNEL_ENTRY_PHYSICAL_ADDRESS)
+		-smp $(NHART)
 
 .PHONY: debug-server
-debug-server: slime_kernel
-	@qemu-system-riscv64 \
-		-machine virt \
+debug-server: $(KERNEL)
+	@$(QEMU) \
+		-M $(MACHINE) \
+		-serial mon:stdio \
 		-nographic \
-		-device loader,file=$(KERNEL_BIN),addr=$(KERNEL_ENTRY_PHYSICAL_ADDRESS) \
-		-s -S 
+		-cpu $(CPU) \
+		-bios $(BOOTLOADER) \
+		-m $(MEM) \
+		-kernel $(KERNEL_BIN) \
+		-smp $(NHART) \
+		-s -S
 
 .PHONY: debug
-debug: 
-	@riscv64-unknown-elf-gdb \
-    -ex 'file $(KERNEL_ELF)' \
-    -ex 'set arch riscv:rv64' \
-    -ex 'target remote localhost:1234'
+debug:
+	@${GDB} \
+		-ex 'file $(KERNEL_ELF)' \
+		-ex 'set arch riscv:rv64' \
+		-ex 'target remote localhost:1234'
 
-.PHONY: clean
-clean:
+.PHONY: clean-kernel
+clean-kernel:
+	@cd $(CRATE_KERNEL)
 	@cargo clean
 
-################################################################
-#                                                              #
-#                          U-mode                              #
-#                                                              #
-################################################################
+.PHONY: clean-user
+clean-user:
+	@cd $(CRATE_USER)
+	@cargo clean
 
-.PHONY: user-clean
-user-clean:
-	@cd user && cargo clean
+.PHONY: clean-all
+clean-all: clean-kernel clean-user
+	@echo [make] all previous build has been cleaned up.
 
-.PHONY: user-run
-user-run: user-build
-	@
+################### Unused ###################
+QEMU = qemu-system-riscv64
+GDB = riscv64-unknown-elf-gdb
 
-.PHONY: user-build
-user-build:
-	@
+TOOLPREFIX = riscv64-unknown-elf-
+
+CC = ${TOOLPREFIX}gcc
+AS = ${TOOLPREFIX}as
+LD = ${TOOLPREFIX}ld
+
+CFLAGS = -march=rv64gc
+##############################################

@@ -1,11 +1,9 @@
-OUTPUT_ARCH(riscv)
-ENTRY(_start)
-
-BASE_ADDRESS = 0x80400000;
+OUTPUT_ARCH( "riscv" )
+ENTRY( _start )
 
 SECTIONS
 {
-    . = BASE_ADDRESS;
+    . = 0x80400000;
     .text : {
         *(.text.entry)
         *(.text .text.*)
@@ -23,8 +21,5 @@ SECTIONS
         *(.bss .bss.*)
         *(.sbss .sbss.*)
         ebss = .;
-    }
-    /DISCARD/ : {
-        *(.eh_frame)
     }
 }

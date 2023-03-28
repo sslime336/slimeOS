@@ -1,14 +1,11 @@
 use riscv::register::sstatus::{self, set_spp, Sstatus, SPP};
 
-use crate::println;
 
 #[repr(C)]
 pub struct TrapContext {
     pub x: [usize; 32], // 32 x registers
     pub sstatus: Sstatus,
     pub sepc: usize,
-    // The following data is written into the corresponding position in
-    // the application address space when the application is initialized.
     kernel_satp: usize,
     pub kernel_sp: usize,
     trap_handler: usize,

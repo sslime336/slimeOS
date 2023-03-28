@@ -2,8 +2,6 @@ use core::arch::global_asm;
 
 use riscv::register::{sscratch, stvec};
 
-use crate::println;
-
 mod context;
 pub mod handler;
 

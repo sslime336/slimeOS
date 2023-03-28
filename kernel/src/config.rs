@@ -14,8 +14,6 @@ pub const TRAP_CONTEXT: usize = TRAMPOLINE - PAGE_SIZE;
 
 pub const MMAP_BASE: usize = 0x60000000;
 
-/// CLOCK_FREQ diffs on different platform, the unit is Hertz(Hz).
-/// More actually, it's the increament of the register mtime's value.
 pub const CLOCK_FREQ: usize = 12500000;
 
 pub const MMIO: &[(usize, usize)] = &[(0x10001000, 0x1000)];

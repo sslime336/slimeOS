@@ -1,17 +1,16 @@
 use alloc::vec::Vec;
 use lazy_static::lazy_static;
+use spin::Mutex;
 
-use crate::sync::safe_cell::SafeCell;
-
-use super::address::{PhyPageNum, PhycialAddress};
+use super::address::PhyPageNum;
 
 type FrameAllocatorImpl = StackFrameAllocator;
 
 lazy_static! {
     /// Global frame memory alloctor for vistual page
     #[allow(non_upper_case_globals)]
-    pub static ref GlobalFrameAlloctor: SafeCell<FrameAllocatorImpl> =
-        unsafe { SafeCell::new(FrameAllocatorImpl::new()) };
+    pub static ref GlobalFrameAlloctor: Mutex<FrameAllocatorImpl> =
+        unsafe {Mutex::new(FrameAllocatorImpl::new()) };
 }
 
 pub struct FrameTracker {
@@ -23,7 +22,6 @@ impl FrameTracker {
     //     let bytes_array = ppn.0.byte
     // }
 }
-
 
 trait FrameAllocator {
     fn new() -> Self;

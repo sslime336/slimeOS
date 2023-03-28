@@ -5,12 +5,3 @@ edition = "2021"
 
 [dependencies]
 riscv = { version = "0.10.1" }
-
-# Currently I don not know beblow can do what.
-# I just want the U-mode programs run smoothly.
-[profile.release]
-debug = true
-opt-level = 1 
-
-[profile.dev]
-opt-level = 1 

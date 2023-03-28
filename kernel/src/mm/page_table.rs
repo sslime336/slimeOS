@@ -1,5 +1,3 @@
-use alloc::vec::Vec;
-
 use super::address::PhyPageNum;
 
 pub struct PageTable {
